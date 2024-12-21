@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UCL Prediction</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9fa;
+        text-align: center;
+      }
+
+      h1 {
+        margin: 30px 0;
+        color: #343a40;
+      }
+
+      .container {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 30px auto;
+        padding: 30px;
+        max-width: 700px;
+      }
+
+      .team-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 20px 0;
+      }
+
+      .team-select {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 45%;
+      }
+
+      .team-select label {
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+
+      select {
+        font-size: 16px;
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+      }
+
+      img.team-logo {
+        width: 120px;
+        height: 120px;
+        object-fit: contain;
+        margin-top: 10px;
+        border: 2px solid #ddd;
+        border-radius: 50%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      button {
+        padding: 12px 20px;
+        font-size: 16px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin: 10px 0;
+      }
+
+      button:hover {
+        background-color: #218838;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>UCL Match Prediction</h1>
+    <div class="container">
+      <form action="/predict" method="post">
+        <div class="team-container">
+          <!-- Team 1 -->
+          <div class="team-select">
+            <label for="team1">Select Team 1:</label>
+            <select
+              name="team1"
+              id="team1"
+              onchange="updateTeamLogo('team1', 'team1-logo')"
+              required
+            >
+              <option value="" disabled selected>-- Select Team --</option>
+              {% for team in teams %}
+              <option value="{{ team.team_id }}" data-logo="{{ team.logo }}">
+                {{ team.team }}
+              </option>
+              {% endfor %}
+            </select>
+            <img
+              id="team1-logo"
+              class="team-logo"
+              src=""
+              alt="Team 1 Logo"
+              style="display: none"
+            />
+          </div>
+
+          <!-- Team 2 -->
+          <div class="team-select">
+            <label for="team2">Select Team 2:</label>
+            <select
+              name="team2"
+              id="team2"
+              onchange="updateTeamLogo('team2', 'team2-logo')"
+              required
+            >
+              <option value="" disabled selected>-- Select Team --</option>
+              {% for team in teams %}
+              <option value="{{ team.team_id }}" data-logo="{{ team.logo }}">
+                {{ team.team }}
+              </option>
+              {% endfor %}
+            </select>
+            <img
+              id="team2-logo"
+              class="team-logo"
+              src=""
+              alt="Team 2 Logo"
+              style="display: none"
+            />
+          </div>
+        </div>
+        <button type="submit">Predict Match</button>
+      </form>
+      <form action="/groups" method="get">
+        <button type="submit">View Groups and Playoffs</button>
+      </form>
+    </div>
+
+    <script>
+      // Update team logo dynamically when a team is selected
+      function updateTeamLogo(selectId, logoId) {
+        const selectElement = document.getElementById(selectId);
+        const selectedOption =
+          selectElement.options[selectElement.selectedIndex];
+        const logoUrl = selectedOption.getAttribute("data-logo");
+        const logoElement = document.getElementById(logoId);
+
+        if (logoUrl) {
+          logoElement.src = logoUrl;
+          logoElement.style.display = "block";
+        } else {
+          logoElement.style.display = "none";
+        }
+      }
+    </script>
+  </body>
+</html>

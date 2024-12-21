@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Match Result</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        color: #333;
+      }
+
+      h1 {
+        margin: 20px 0;
+        color: #343a40;
+      }
+
+      .team-container {
+        display: flex;
+        justify-content: center;
+        gap: 50px;
+        margin: 20px 0;
+      }
+
+      .team-block {
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        width: 200px;
+        background-color: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .team-block img {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 10px;
+      }
+
+      .team-score {
+        font-size: 32px;
+        font-weight: bold;
+        color: #28a745;
+        margin: 10px 0;
+      }
+
+      h2 {
+        margin: 5px 0;
+        font-size: 20px;
+        color: #343a40;
+      }
+
+      /* Timeline Section */
+      .timeline {
+        list-style: none;
+        padding: 0;
+        margin: 20px auto;
+        max-width: 600px;
+        text-align: left;
+      }
+
+      .timeline li {
+        margin: 10px 0;
+        padding: 10px;
+        background: #fff;
+        border-left: 4px solid #007bff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .timeline-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-left: 10px;
+        vertical-align: middle;
+      }
+
+      /* Probability Section */
+      .probability-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin: 20px auto;
+        max-width: 600px;
+      }
+
+      .progress-bar {
+        background-color: #e9ecef;
+        border-radius: 5px;
+        height: 20px;
+        width: 100%;
+        position: relative;
+      }
+
+      .progress {
+        height: 100%;
+        border-radius: 5px;
+        text-align: center;
+        color: #fff;
+        font-weight: bold;
+        line-height: 20px;
+      }
+
+      .team1 {
+        background-color: #007bff;
+      }
+
+      .team2 {
+        background-color: #dc3545;
+      }
+
+      a {
+        display: inline-block;
+        margin-top: 20px;
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Match Result Header -->
+    <h1>Match Result</h1>
+
+    <!-- Team Scores Section -->
+    <div class="team-container">
+      <div class="team-block">
+        <img src="{{ team1.logo }}" alt="{{ team1.team }}" />
+        <h2>{{ team1.team }}</h2>
+        <div class="team-score">{{ team1_goals }}</div>
+      </div>
+      <div class="team-block">
+        <img src="{{ team2.logo }}" alt="{{ team2.team }}" />
+        <h2>{{ team2.team }}</h2>
+        <div class="team-score">{{ team2_goals }}</div>
+      </div>
+    </div>
+
+    <!-- Timeline Section -->
+    <h2>Timeline</h2>
+    <ul class="timeline">
+      {% for event in events %}
+      <li>
+        <strong>{{ event.minute }}'</strong>: {% if event.event == 'Half-Time'
+        %} {{ event.event }} {% else %} {{ event.event }} by {% if event.photo
+        %}
+        <img
+          src="{{ event.photo }}"
+          alt="{{ event.player }}"
+          class="timeline-img"
+        />
+        {% endif %} {{ event.player }} {% if event.team %} ({{ event.team }}) {%
+        endif %} {% if event.event == 'Goal' and event.assist_text %} {{
+        event.assist_text }} {% if event.assist_photo %}
+        <img
+          src="{{ event.assist_photo }}"
+          alt="Assister"
+          class="timeline-img"
+        />
+        {% endif %} {% endif %} {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+
+    <!-- Winning Probabilities Section -->
+    <h2>Winning Probabilities</h2>
+    <div class="probability-container">
+      <div>
+        <h3>{{ team1.team }}</h3>
+        <div class="progress-bar">
+          <div class="progress team1" style="width: {{ team1_prob }}">
+            {{ team1_prob }}
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3>{{ team2.team }}</h3>
+        <div class="progress-bar">
+          <div class="progress team2" style="width: {{ team2_prob }}">
+            {{ team2_prob }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back Link -->
+    <a href="/">Back to Home</a>
+  </body>
+</html>

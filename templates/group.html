@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UCL Group Stage and Playoffs</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 50px;
+        background-color: #f9f9f9;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid #ddd;
+        border-collapse: collapse;
+        padding: 12px;
+        text-align: center;
+      }
+      th {
+        background-color: #4caf50;
+        color: white;
+      }
+      .section {
+        margin-bottom: 60px;
+      }
+      h1,
+      h2,
+      h3 {
+        text-align: center;
+        color: #333;
+      }
+      .bracket {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin-top: 20px;
+      }
+      .round {
+        width: 22%;
+        min-width: 250px;
+        margin-bottom: 40px;
+        background-color: #fff;
+        padding: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+      .match {
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fefefe;
+      }
+      .match p {
+        margin: 5px 0;
+      }
+      .top-list {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+      }
+      .top-category {
+        width: 28%;
+        min-width: 280px;
+        margin-bottom: 40px;
+        background-color: #fff;
+        padding: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+      .top-category h3 {
+        text-align: center;
+        margin-bottom: 15px;
+        color: #4caf50;
+      }
+      .top-category table {
+        width: 100%;
+      }
+      .player-photo,
+      .team-logo {
+        width: 40px;
+        height: 40px;
+        vertical-align: middle;
+        margin-right: 10px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      .champion-section {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+      .champion-section img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 20px;
+      }
+      a {
+        display: block;
+        margin-top: 30px;
+        text-align: center;
+        text-decoration: none;
+        color: #007bff;
+        font-size: 18px;
+      }
+      @media (max-width: 1024px) {
+        .round {
+          width: 45%;
+        }
+        .top-category {
+          width: 45%;
+        }
+      }
+      @media (max-width: 768px) {
+        .round {
+          width: 90%;
+        }
+        .top-category {
+          width: 90%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Champion Section -->
+    <div class="champion-section">
+      <h2>Champion</h2>
+      {% if champion_logo %}
+      <img src="{{ champion_logo }}" alt="{{ champion }}" />
+      {% endif %}
+      <p style="font-size: 24px; font-weight: bold">{{ champion }}</p>
+    </div>
+
+    <!-- Group Standings -->
+    <h1>UCL Group Stage Standings</h1>
+    <div class="section">
+      <table>
+        <tr>
+          <th>Rank</th>
+          <th>Team</th>
+          <th>Played</th>
+          <th>Wins</th>
+          <th>Draws</th>
+          <th>Losses</th>
+          <th>Goals For</th>
+          <th>Goals Against</th>
+          <th>Goal Difference</th>
+          <th>Points</th>
+        </tr>
+        {% for team in standings %}
+        <tr>
+          <td>{{ team.rank }}</td>
+          <td>
+            <img
+              src="{{ team.logo }}"
+              alt="{{ team.team }}"
+              class="team-logo"
+            />
+            {{ team.team }}
+          </td>
+          <td>{{ team.played }}</td>
+          <td>{{ team.wins }}</td>
+          <td>{{ team.draws }}</td>
+          <td>{{ team.losses }}</td>
+          <td>{{ team.goals_for }}</td>
+          <td>{{ team.goals_against }}</td>
+          <td>{{ team.goal_difference }}</td>
+          <td>{{ team.points }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <!-- Knockout Playoffs -->
+    <h2>Knockout Playoffs</h2>
+    <div class="section bracket">
+      <!-- Playoff Playoffs -->
+      <div class="round">
+        <h3>Playoff Playoffs</h3>
+        {% if playoff %} {% for match in playoff %}
+        <div class="match">
+          <p>
+            <img
+              src="{{ match.team1_logo }}"
+              alt="Team Logo"
+              class="team-logo"
+            />
+            {{ match.match }}
+            <img
+              src="{{ match.team2_logo }}"
+              alt="Team Logo"
+              class="team-logo"
+            />
+          </p>
+          <p><strong>Winner: {{ match.winner }}</strong></p>
+        </div>
+        {% endfor %} {% else %}
+        <p>No playoff matches.</p>
+        {% endif %}
+      </div>
+      <!-- Round of 16 -->
+      <div class="round">
+        <h3>Round of 16</h3>
+        {% if round_of_16 %} {% for match in round_of_16 %}
+        <div class="match">
+          <p>
+            <img
+              src="{{ match.team1_logo }}"
+              alt="Team Logo"
+              class="team-logo"
+            />
+            {{ match.match }}
+            <img
+              src="{{ match.team2_logo }}"
+              alt="Team Logo"
+              class="team-logo"
+            />
+          </p>
+          <p><strong>Winner: {{ match.winner }}</strong></p>
+        </div>
+        {% endfor %} {% else %}
+        <p>No Round of 16 matches.</p>
+        {% endif %}
+      </div>
+      <!-- Quarterfinals -->
+      <div class="round">
+        <h3>Quarterfinals</h3>
+        {% if quarterfinal %} {% for match in quarterfinal %}
+        <div class="match">
+          <p>
+            <img
+              src="{{ match.team1_logo }}"
+              alt="Team Logo"
+              class="team-logo"
+            />
+            {{ match.match }}
+            <img
+              src="{{ match.team2_logo }}"
+              alt="Team Logo"
+              class="team-logo"
+            />
+          </p>
+          <p><strong>Winner: {{ match.winner }}</strong></p>
+        </div>
+        {% endfor %} {% else %}
+        <p>No Quarterfinal matches.</p>
+        {% endif %}
+      </div>
+      <!-- Semifinals -->
+      <div class="round">
+        <h3>Semifinals</h3>
+        {% if semifinal %} {% for match in semifinal %}
+        <div class="match">
+          <p>
+            <img
+              src="{{ match.team1_logo }}"
+              alt="Team Logo"
+              class="team-logo"
+            />
+            {{ match.match }}
+            <img
+              src="{{ match.team2_logo }}"
+              alt="Team Logo"
+              class="team-logo"
+            />
+          </p>
+          <p><strong>Winner: {{ match.winner }}</strong></p>
+        </div>
+        {% endfor %} {% else %}
+        <p>No Semifinal matches.</p>
+        {% endif %}
+      </div>
+      <!-- Final -->
+      <div class="round">
+        <h3>Final</h3>
+        {% if final %} {% for match in final %}
+        <div class="match">
+          <p>
+            <img
+              src="{{ match.team1_logo }}"
+              alt="Team Logo"
+              class="team-logo"
+            />
+            {{ match.match }}
+            <img
+              src="{{ match.team2_logo }}"
+              alt="Team Logo"
+              class="team-logo"
+            />
+          </p>
+          <p><strong>Winner: {{ match.winner }}</strong></p>
+        </div>
+        {% endfor %} {% else %}
+        <p>No Final match.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Top 10 Lists -->
+    <h2>Top 10 Players</h2>
+    <div class="section top-list">
+      <div class="top-category">
+        <h3>Top 10 Goalscorers</h3>
+        <table>
+          <tr>
+            <th>Player</th>
+            <th>Goals</th>
+          </tr>
+          {% for player in top_goalscorers %}
+          <tr>
+            <td>
+              <img
+                src="{{ player.player_image }}"
+                alt="{{ player.player_name }}"
+                class="player-photo"
+              />
+              {{ player.player_name }}
+            </td>
+            <td>{{ player.goals }}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+      <div class="top-category">
+        <h3>Top 10 Assisters</h3>
+        <table>
+          <tr>
+            <th>Player</th>
+            <th>Assists</th>
+          </tr>
+          {% for player in top_assisters %}
+          <tr>
+            <td>
+              <img
+                src="{{ player.player_image }}"
+                alt="{{ player.player_name }}"
+                class="player-photo"
+              />
+              {{ player.player_name }}
+            </td>
+            <td>{{ player.assists }}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+      <div class="top-category">
+        <h3>Top 10 Goalkeepers with Clean Sheets</h3>
+        <table>
+          <tr>
+            <th>Goalkeeper</th>
+            <th>Clean Sheets</th>
+          </tr>
+          {% for goalkeeper in top_clean_sheets %}
+          <tr>
+            <td>
+              <img
+                src="{{ goalkeeper.player_image }}"
+                alt="{{ goalkeeper.player_name }}"
+                class="player-photo"
+              />
+              {{ goalkeeper.player_name }}
+            </td>
+            <td>{{ goalkeeper.clean_sheets }}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+
+    <a href="/">Go Back Home</a>
+  </body>
+</html>
